@@ -2,14 +2,12 @@
 import Todo from './Todo'
 
 
-function Body() {
+function Body({todos}) {
   return (
     <div className=''>
-      <Todo />
-      <Todo />
-      <Todo />
-      <Todo />
-      <Todo />
+     {todos.map((e,i) => {
+      return <Todo key={i} todo={e.todo} />
+     })}
     </div>
   )
 }

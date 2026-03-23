@@ -1,9 +1,16 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const jwt=require('jsonwebtoken');
+const app = express();
 
 const {authMiddleware} = require('./middleware/auth.js');
-const app = express();
+
+app.use(cors({
+    origin: "http://localhost:5173", // Vite default
+    credentials: true
+}));
+
 
 app.use(cookieParser());
 
@@ -21,11 +28,16 @@ const userdata = [
 // }
 ]
 const todo = [
-    // {
-    //     id,
-    //     username,
-    //     todo
-    // }
+    {
+        id:1,
+        username:"nikhil",
+        todo:"go to gym"
+    },
+     {
+        id:2,
+        username:"2nikhil",
+        todo:"2go to gym"
+    }
 ]
 
 app.post('/signup', (req, res) => {
@@ -60,7 +72,7 @@ app.post('/signin', (req, res) => {
 })
 
 
-app.post('/add-todo', authMiddleware, (req,res) => {
+app.post('/add-todo',authMiddleware,  (req,res) => {
   const username=req.username;
   const content=req.body.content;
  todo.push({
@@ -71,7 +83,7 @@ app.post('/add-todo', authMiddleware, (req,res) => {
  res.status(200).json({message:'todo added succesfully.'})
 })
 
-app.get('/todo', authMiddleware, (req,res) => {
+app.get('/todo',authMiddleware,  (req,res) => {
   const username=req.username;
   const arr=todo.filter((o) => {
     return username===o.username;
