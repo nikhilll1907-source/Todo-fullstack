@@ -5,9 +5,11 @@ import Todo from './Todo'
 function Body({todos}) {
   return (
     <div className=''>
-     {todos.map((e,i) => {
-      return <Todo key={i} todo={e.todo} />
-     })}
+    {
+       todos.map((e,i) => {
+      return <Todo key={i} i={i} todo={e.todo}  />
+       })
+     }
     </div>
   )
 }
