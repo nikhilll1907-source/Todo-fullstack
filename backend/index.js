@@ -20,24 +20,24 @@ app.use(express.json());
 let id = 0;
 let todo_id=0;
 
-const userdata = [
+let userdata = [
 //     {
 //        id,
 //        username, //unique
 //        password
 // }
 ]
-const todo = [
-    {
-        id:1,
-        username:"nikhil",
-        todo:"go to gym"
-    },
-     {
-        id:2,
-        username:"2nikhil",
-        todo:"2go to gym"
-    }
+let todo = [
+    // {
+    //     id:1,
+    //     username:"nikhil",
+    //     todo:"go to gym"
+    // },
+    //  {
+    //     id:2,
+    //     username:"2nikhil",
+    //     todo:"2go to gym"
+    // }
 ]
 
 app.post('/signup', (req, res) => {
@@ -90,7 +90,13 @@ app.get('/todo',authMiddleware,  (req,res) => {
   })
   res.status(200).json({arr})
 })
-
+app.post('/del-todo',authMiddleware,(req,res) => {
+   const username=req.username;
+   const id=req.body.id;
+ let arr=todo.filter((ele)=>{ return ele.id!=id})
+  todo=arr;
+ res.status(200).json({message:"todo deleted succesfully"})
+})
 const PORT = 3000;
 app.listen(3000, () => {
     console.log(`app is working on http://localhost:${PORT}`);
