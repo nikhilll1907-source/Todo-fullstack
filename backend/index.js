@@ -52,9 +52,11 @@ app.post('/signup', (req, res) => {
         username: username,
         password: password
     })
-    res.status(201).json({
-        message: "New user created"
-    })
+     const token= jwt.sign({username},"nikhil")
+     res.cookie=("token",token);
+     req.status(200).json({
+        message:"New user created"
+     })
 })
 
 
@@ -69,6 +71,12 @@ app.post('/signin', (req, res) => {
     else return res.status(401).json({
         error: "Some thing is Wrong,Try again."
     })
+})
+app.post('/logout',(req,res) => {
+  req.cookies='';
+  res.status(200).json({
+    message:"logout succesfully"
+  })
 })
 
 
@@ -90,7 +98,7 @@ app.get('/todo',authMiddleware,  (req,res) => {
   })
   res.status(200).json({arr})
 })
-app.post('/del-todo',authMiddleware,(req,res) => {
+app.delete('/del-todo',authMiddleware,(req,res) => {
    const username=req.username;
    const id=req.body.id;
  let arr=todo.filter((ele)=>{ return ele.id!=id})
