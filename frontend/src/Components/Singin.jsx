@@ -1,15 +1,14 @@
 import React from 'react'
 import { useState } from 'react';
 import {Link } from 'react-router-dom'
-function Singin() {
+function Singin({login}) {
   
    let [username,setUsername]=useState('');
      let [password,setPassword]=useState('');
   
       function onSubmit(e){
         e.preventDefault();
-        console.log(username);
-        console.log(password);
+         login(username,password);
         setUsername('');
         setPassword('');
       }

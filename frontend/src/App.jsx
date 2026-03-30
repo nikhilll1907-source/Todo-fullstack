@@ -6,7 +6,7 @@ import SignUp from './Components/SignUp'
 import Singin from './Components/Singin'
 import About from './Components/About'
 import axios from "axios";
-import { Route, Routes } from 'react-router-dom'
+import { resolvePath, Route, Routes } from 'react-router-dom'
 
 import Todo from './Components/Todo'
 
@@ -14,7 +14,7 @@ import Todo from './Components/Todo'
 function App() {
 
 let [todos,setTodos]=useState([]);
-
+let [refresh,setRefresh]=useState(0);
     const addTodo=async(todo)=>{
       try{
        const response= await axios.post("http://localhost:3000/add-todo",{
@@ -25,6 +25,7 @@ let [todos,setTodos]=useState([]);
        todo
        });
       setTodos(newtodos);
+      console.log(response)
       }
       catch(err){
         console.log(`error occured ${err}`)
@@ -34,7 +35,7 @@ let [todos,setTodos]=useState([]);
    useEffect(  () => {
     const fetchdata= async()=>{
     try{
-      const response= await axios.get("http://localhost:3000/todo",{ withCredentials: true} )
+      const response= await axios.get("http://localhost:3000/todo",{},{ withCredentials: true} )
       console.log(response.data.arr);
      setTodos(response.data.arr);
     }
@@ -43,7 +44,7 @@ let [todos,setTodos]=useState([]);
     }
   }
   fetchdata();
-   }, [])
+   }, [[],])
 
    
    const signup =async(username,password)=>{
@@ -51,14 +52,36 @@ let [todos,setTodos]=useState([]);
       const response=await axios.post('http://localhost:3000/signup',{
         username: username,
         password: password
-      })
+      },{ withCredentials: true})
       console.log(response)
      }
      catch(err){
       console.log(err);
      }
    }
-
+   const logout=async()=>{
+         try{
+          const response=await axios.post('http://localhost:3000/logout',{},{ withCredentials: true})
+          console.log(response)
+          setTodos([])
+         } 
+         catch(err){
+          console.log(`error found in logut ${err}`)
+         }
+   }
+ 
+   const login=async(username,password)=>{
+    try{
+      const response=await axios.post('http://localhost:3000/signin',{
+        username,
+        password,
+      },{ withCredentials: true});
+      console.log(response)
+    }
+    catch(err){
+      console.log(err)
+    }
+   }
   const data = [
     {
       id:1,
@@ -81,12 +104,12 @@ let [todos,setTodos]=useState([]);
   return (
     <>
       <div className='h-screen bg-gray-800'>
-        <Header></Header>
+        <Header logout={logout}></Header>
         <Routes>
           <Route path='/' element={<Body todos={todos} />}></Route>
           <Route path='/add-todo' element={<AddTodo addTodo={addTodo} />}></Route>
           <Route path='/signup' element={<SignUp signup={signup} />}></Route>
-          <Route path='/login' element={<Singin />}></Route>
+          <Route path='/login' element={<Singin login={login} />}></Route>
           <Route path='/about' element={<About />}></Route>
 
         </Routes>

@@ -53,10 +53,16 @@ app.post('/signup', (req, res) => {
         password: password
     })
      const token= jwt.sign({username},"nikhil")
-     res.cookie=("token",token);
-     req.status(200).json({
-        message:"New user created"
-     })
+    res.cookie("token", token
+    //  {
+    //     httpOnly: true,
+    //     sameSite: "lax",   // important for localhost
+    //     secure: false      // since you're using http
+    // }
+    );
+      res.status(200).json({
+    message: "User created successfully"
+   });
 })
 
 
@@ -73,7 +79,7 @@ app.post('/signin', (req, res) => {
     })
 })
 app.post('/logout',(req,res) => {
-  req.cookies='';
+  res.cookie("token",'');
   res.status(200).json({
     message:"logout succesfully"
   })

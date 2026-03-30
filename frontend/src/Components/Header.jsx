@@ -1,6 +1,6 @@
 import React, { Activity } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-function Header() {
+function Header({logout}) {
   return (
     <>
     <div className='bg-cyan-900 flex w-full justify-between p-3'>
@@ -29,6 +29,8 @@ function Header() {
           }} to='/login'
           >login
           </NavLink>
+          
+             <button onClick={()=>logout()}   className='bg-red-600 p-2 rounded-lg hover:bg-red-900'>Logout</button>
             
         </div>
     </div>
