@@ -79,7 +79,7 @@ app.post('/signin', (req, res) => {
     })
 })
 app.post('/logout',(req,res) => {
-  res.cookie("token",'');
+  res.cookie("token","");
   res.status(200).json({
     message:"logout succesfully"
   })

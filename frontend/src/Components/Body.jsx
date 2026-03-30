@@ -7,7 +7,7 @@ function Body({todos}) {
     <div className=''>
     {
        todos.map((e,i) => {
-      return <Todo key={i} i={i} todo={e.todo}  />
+      return <Todo key={i} i={i+1} todo={e.todo}  />
        })
      }
     </div>

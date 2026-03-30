@@ -15,17 +15,14 @@ function App() {
 
 let [todos,setTodos]=useState([]);
 let [refresh,setRefresh]=useState(0);
+let [logdin,Setlogdin]=useState(false);
     const addTodo=async(todo)=>{
       try{
        const response= await axios.post("http://localhost:3000/add-todo",{
              content:todo,      
        }, { withCredentials: true }) // withCredentials is vry important to talk
-       const newtodos=[...todos];
-        newtodos.push({
-       todo
-       });
-      setTodos(newtodos);
-      console.log(response)
+        console.log(response)
+        setRefresh(prev => prev + 1);
       }
       catch(err){
         console.log(`error occured ${err}`)
@@ -33,9 +30,10 @@ let [refresh,setRefresh]=useState(0);
     }
 
    useEffect(  () => {
+      if(!logdin) return;
     const fetchdata= async()=>{
     try{
-      const response= await axios.get("http://localhost:3000/todo",{},{ withCredentials: true} )
+      const response= await axios.get("http://localhost:3000/todo",{ withCredentials: true} )
       console.log(response.data.arr);
      setTodos(response.data.arr);
     }
@@ -44,7 +42,7 @@ let [refresh,setRefresh]=useState(0);
     }
   }
   fetchdata();
-   }, [[],])
+   }, [refresh])
 
    
    const signup =async(username,password)=>{
@@ -53,7 +51,9 @@ let [refresh,setRefresh]=useState(0);
         username: username,
         password: password
       },{ withCredentials: true})
+      Setlogdin(true)
       console.log(response)
+
      }
      catch(err){
       console.log(err);
@@ -63,7 +63,9 @@ let [refresh,setRefresh]=useState(0);
          try{
           const response=await axios.post('http://localhost:3000/logout',{},{ withCredentials: true})
           console.log(response)
+          Setlogdin(false)
           setTodos([])
+        setRefresh(prev => prev + 1);
          } 
          catch(err){
           console.log(`error found in logut ${err}`)
@@ -77,29 +79,24 @@ let [refresh,setRefresh]=useState(0);
         password,
       },{ withCredentials: true});
       console.log(response)
+       Setlogdin(true)
+      setRefresh(prev => prev + 1);
     }
     catch(err){
       console.log(err)
     }
    }
-  const data = [
-    {
-      id:1,
-      todo: "jdsfj"
-    },
-    {
-      id:2,
-      todo: "jdsfjd"
-    }
-  ]
+  // const data = [
+  //   {
+  //     id:1,
+  //     todo: "jdsfj"
+  //   },
+  //   {
+  //     id:2,
+  //     todo: "jdsfjd"
+  //   }
+  // ]
 
-  // function addTodo(todo){
-  //    const newtodos=[...todos];
-  //    newtodos.push({
-  //     todo
-  //    });
-  //    setTodos(newtodos);
-  // }
 
   return (
     <>
