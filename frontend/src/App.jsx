@@ -86,6 +86,16 @@ let [logdin,Setlogdin]=useState(false);
       console.log(err)
     }
    }
+  const deleteTodo = async(id)=>{
+    try{
+     const response=await axios.delete(`http://localhost:3000/del-todo/${id}`,      {withCredentials:true});
+     console.log(response);
+     setRefresh(prev=>prev+1);
+    }
+    catch(err){
+       console.log(`error ${err}`)
+    }
+   }
   // const data = [
   //   {
   //     id:1,
@@ -103,11 +113,11 @@ let [logdin,Setlogdin]=useState(false);
       <div className='h-screen bg-gray-800'>
         <Header logout={logout}></Header>
         <Routes>
-          <Route path='/' element={<Body todos={todos} />}></Route>
+          <Route path='/' element={<Body todos={todos} deleteTodo={deleteTodo}/>}></Route>
           <Route path='/add-todo' element={<AddTodo addTodo={addTodo} />}></Route>
           <Route path='/signup' element={<SignUp signup={signup} />}></Route>
           <Route path='/login' element={<Singin login={login} />}></Route>
-          <Route path='/about' element={<About />}></Route>
+          <Route path='/about' element={<About  />}></Route>
 
         </Routes>
       </div>

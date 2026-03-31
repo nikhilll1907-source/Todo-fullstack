@@ -104,9 +104,9 @@ app.get('/todo',authMiddleware,  (req,res) => {
   })
   res.status(200).json({arr})
 })
-app.delete('/del-todo',authMiddleware,(req,res) => {
+app.delete('/del-todo/:id',authMiddleware,(req,res) => {
    const username=req.username;
-   const id=req.body.id;
+   const id=(req.params.id);
  let arr=todo.filter((ele)=>{ return ele.id!=id})
   todo=arr;
  res.status(200).json({message:"todo deleted succesfully"})
