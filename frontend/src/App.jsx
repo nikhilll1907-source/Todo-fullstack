@@ -6,9 +6,12 @@ import SignUp from './Components/SignUp'
 import Singin from './Components/Singin'
 import About from './Components/About'
 import axios from "axios";
-import { resolvePath, Route, Routes } from 'react-router-dom'
+import { Navigate, resolvePath, Route, Routes } from 'react-router-dom'
+
 
 import Todo from './Components/Todo'
+// mongodb+srv://Todobackend:<Nikhil@2606>@todo.ypvyvev.mongodb.net/
+//mongodb+srv://Todobackend:<db_password>@todo.ypvyvev.mongodb.net/
 
 
 function App() {
@@ -16,6 +19,7 @@ function App() {
 let [todos,setTodos]=useState([]);
 let [refresh,setRefresh]=useState(0);
 let [logdin,Setlogdin]=useState(false);
+
     const addTodo=async(todo)=>{
       try{
        const response= await axios.post("http://localhost:3000/add-todo",{
@@ -96,27 +100,17 @@ let [logdin,Setlogdin]=useState(false);
        console.log(`error ${err}`)
     }
    }
-  // const data = [
-  //   {
-  //     id:1,
-  //     todo: "jdsfj"
-  //   },
-  //   {
-  //     id:2,
-  //     todo: "jdsfjd"
-  //   }
-  // ]
 
 
   return (
     <>
       <div className='h-screen bg-gray-800'>
-        <Header logout={logout}></Header>
+        <Header logout={logout} logdin={logdin}></Header>
         <Routes>
-          <Route path='/' element={<Body todos={todos} deleteTodo={deleteTodo}/>}></Route>
-          <Route path='/add-todo' element={<AddTodo addTodo={addTodo} />}></Route>
-          <Route path='/signup' element={<SignUp signup={signup} />}></Route>
-          <Route path='/login' element={<Singin login={login} />}></Route>
+          <Route path='/' element={logdin?<Body todos={todos} deleteTodo={deleteTodo}/>:<Navigate to='/login'></Navigate>}></Route>
+          <Route path='/add-todo' element={logdin?<AddTodo addTodo={addTodo} />:<Navigate to='/login'></Navigate>}></Route>
+          <Route path='/signup' element={!logdin ?<SignUp signup={signup}  />:<Navigate to='/'></Navigate>}></Route>
+          <Route path='/login' element={!logdin?<Singin login={login} />:<Navigate to='/'></Navigate>}></Route>
           <Route path='/about' element={<About  />}></Route>
 
         </Routes>

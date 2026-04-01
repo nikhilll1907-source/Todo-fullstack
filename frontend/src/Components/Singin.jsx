@@ -19,7 +19,7 @@ function Singin({login}) {
         <input value={username} onChange={(e)=>setUsername(e.target.value)} type="text" className='border-2 rounded-2xl  p-3 ' placeholder='Enter Your User Name' />
         <input value={password} onChange={(e)=>setPassword(e.target.value)} type="text" className='border-2 rounded-2xl p-3' placeholder='Enter Your User Password' />
         <button className='p-3 border-2 rounded-2xl hover:bg-gray-950 transition duration-1000 ease-in-out active:scale-95 '>Login Your account</button>
-         <Link to='/signup' className='text-red-400 underline text-2xl my-3'>Create new User</Link>
+          <Link to='/signup' className='text-red-400 underline text-2xl my-3'>Create new User</Link>
       </form>
 
     </div>

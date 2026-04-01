@@ -1,6 +1,6 @@
 import React, { Activity } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-function Header({logout}) {
+function Header({logout,logdin}) {
   return (
     <>
     <div className='bg-cyan-900 flex w-full justify-between p-3'>
@@ -24,13 +24,13 @@ function Header({logout}) {
           >About
           </NavLink>
 
-             <NavLink className={({isActive})=>{
+            { !logdin && <NavLink className={({isActive})=>{
              return `p-1  hover:bg-cyan-600 ${isActive ? "text-white" : "text-black"} rounded-lg flex justify-center items-center min-w-18 `
           }} to='/login'
           >login
-          </NavLink>
+          </NavLink>}
           
-             <button onClick={()=>logout()}   className='bg-red-600 p-2 rounded-lg hover:bg-red-900'>Logout</button>
+           { logdin ? <button onClick={()=>logout()}   className='bg-red-600 p-2 rounded-lg hover:bg-red-900'>Logout</button>:null}
             
         </div>
     </div>
