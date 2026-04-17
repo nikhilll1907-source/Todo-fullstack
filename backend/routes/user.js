@@ -8,8 +8,8 @@ const logout = require('../controllers/user/logout.js');
 const authMiddleware =require('../middleware/auth.js');
 
 
-route('/login', login)
-route('/logout',authMiddleware,logout)
-route('/signup', signup)
+route.post('/login', login)
+route.post('/logout',authMiddleware,logout)
+route.post('/signup', signup)
 
 module.exports = route;
