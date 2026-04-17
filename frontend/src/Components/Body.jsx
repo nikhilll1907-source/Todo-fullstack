@@ -12,7 +12,7 @@ function Body({todos,deleteTodo}) {
       }
    {
         todos.map((e,i) => {
-      return <Todo  key={i} i={i+1} todo={e.todo}  id={e.id} deleteTodo={deleteTodo} />
+      return <Todo  key={i} i={i+1} todo={e.task}  id={e._id} deleteTodo={deleteTodo} />
        })
       }
     </div>

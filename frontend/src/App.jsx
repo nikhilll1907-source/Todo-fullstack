@@ -10,97 +10,96 @@ import { Navigate, resolvePath, Route, Routes } from 'react-router-dom'
 
 
 import Todo from './Components/Todo'
-// mongodb+srv://Todobackend:<Nikhil@2606>@todo.ypvyvev.mongodb.net/
-//mongodb+srv://Todobackend:<db_password>@todo.ypvyvev.mongodb.net/
-// mongodb+srv://Todobackend:Nikhil@2606@todo.ypvyvev.mongodb.net/
-
+const API = import.meta.env.VITE_BACKEND2;
 
 function App() {
 
-let [todos,setTodos]=useState([]);
-let [refresh,setRefresh]=useState(0);
-let [logdin,Setlogdin]=useState(false);
+  let [todos, setTodos] = useState([]);
+  let [refresh, setRefresh] = useState(0);
+  let [logdin, Setlogdin] = useState(false);
 
-    const addTodo=async(todo)=>{
-      try{
-       const response= await axios.post("http://localhost:3000/add-todo",{
-             content:todo,      
-       }, { withCredentials: true }) // withCredentials is vry important to talk
-        console.log(response)
-        setRefresh(prev => prev + 1);
-      }
-      catch(err){
-        console.log(`error occured ${err}`)
-      }
+  const addTodo = async (todo) => {
+    try {
+      const response = await axios.post(`${API}/todo/add-todo`, {
+        title: (todo+'xyz'),
+        task: todo,
+      }, { withCredentials: true }) // withCredentials is vry important to talk
+      console.log(response)
+      setRefresh(prev => prev + 1);
     }
-
-   useEffect(  () => {
-      if(!logdin) return;
-    const fetchdata= async()=>{
-    try{
-      const response= await axios.get("http://localhost:3000/todo",{ withCredentials: true} )
-      console.log(response.data.arr);
-     setTodos(response.data.arr);
-    }
-    catch(err){
-      console.log(`error is going on ${err}`)
+    catch (err) {
+      console.log(`error occured ${err}`)
     }
   }
-  fetchdata();
-   }, [refresh])
 
-   
-   const signup =async(username,password)=>{
-     try{
-      const response=await axios.post('http://localhost:3000/signup',{
+  useEffect(() => {
+    if (!logdin) return;
+    const fetchdata = async () => {
+      try {
+        const response = await axios.get(`${API}/todo/todo`, { withCredentials: true })
+        console.log(response.data.todos);
+        setTodos(response.data.todos);
+        console.log(todos)
+      }
+      catch (err) {
+        console.log(`error is going on ${err}`)
+      }
+    }
+    fetchdata();
+  }, [refresh])
+
+
+  const signup = async (username, password) => {
+    try {
+      const response = await axios.post(`${API}/user/signup`, {
         username: username,
         password: password
-      },{ withCredentials: true})
+      }, { withCredentials: true })
       Setlogdin(true)
       console.log(response)
 
-     }
-     catch(err){
+    }
+    catch (err) {
       console.log(err);
-     }
-   }
-   const logout=async()=>{
-         try{
-          const response=await axios.post('http://localhost:3000/logout',{},{ withCredentials: true})
-          console.log(response)
-          Setlogdin(false)
-          setTodos([])
-        setRefresh(prev => prev + 1);
-         } 
-         catch(err){
-          console.log(`error found in logut ${err}`)
-         }
-   }
- 
-   const login=async(username,password)=>{
-    try{
-      const response=await axios.post('http://localhost:3000/signin',{
-        username,
-        password,
-      },{ withCredentials: true});
+    }
+  }
+  const logout = async () => {
+    try {
+      const response = await axios.post(`${API}/user/logout`, {}, { withCredentials: true })
       console.log(response)
-       Setlogdin(true)
+      Setlogdin(false)
+      setTodos([])
       setRefresh(prev => prev + 1);
     }
-    catch(err){
+    catch (err) {
+      console.log(`error found in logut ${err}`)
+    }
+  }
+
+  const login = async (username, password) => {
+    try {
+      const response = await axios.post(`${API}/user/login`, {
+        username,
+        password,
+      }, { withCredentials: true });
+      console.log(response)
+      Setlogdin(true)
+      setRefresh(prev => prev + 1);
+    }
+    catch (err) {
       console.log(err)
     }
-   }
-  const deleteTodo = async(id)=>{
-    try{
-     const response=await axios.delete(`http://localhost:3000/del-todo/${id}`,      {withCredentials:true});
-     console.log(response);
-     setRefresh(prev=>prev+1);
+  }
+  const deleteTodo = async (id) => {
+    try {
+      const response = await axios.delete(`${API}/todo/del-todo/${id}`, { withCredentials: true });
+      console.log(response);
+      setRefresh(prev => prev + 1);
     }
-    catch(err){
-       console.log(`error ${err}`)
+    catch (err) {
+      console.log(`error ${err}`)
     }
-   }
+  }
 
 
   return (
@@ -108,11 +107,11 @@ let [logdin,Setlogdin]=useState(false);
       <div className='h-screen bg-gray-800'>
         <Header logout={logout} logdin={logdin}></Header>
         <Routes>
-          <Route path='/' element={logdin?<Body todos={todos} deleteTodo={deleteTodo}/>:<Navigate to='/login'></Navigate>}></Route>
-          <Route path='/add-todo' element={logdin?<AddTodo addTodo={addTodo} />:<Navigate to='/login'></Navigate>}></Route>
-          <Route path='/signup' element={!logdin ?<SignUp signup={signup}  />:<Navigate to='/'></Navigate>}></Route>
-          <Route path='/login' element={!logdin?<Singin login={login} />:<Navigate to='/'></Navigate>}></Route>
-          <Route path='/about' element={<About  />}></Route>
+          <Route path='/' element={logdin ? <Body todos={todos} deleteTodo={deleteTodo} /> : <Navigate to='/login'></Navigate>}></Route>
+          <Route path='/add-todo' element={logdin ? <AddTodo addTodo={addTodo} /> : <Navigate to='/login'></Navigate>}></Route>
+          <Route path='/signup' element={!logdin ? <SignUp signup={signup} /> : <Navigate to='/'></Navigate>}></Route>
+          <Route path='/login' element={!logdin ? <Singin login={login} /> : <Navigate to='/'></Navigate>}></Route>
+          <Route path='/about' element={<About />}></Route>
 
         </Routes>
       </div>
