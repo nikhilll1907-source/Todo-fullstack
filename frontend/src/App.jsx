@@ -12,6 +12,7 @@ import { Navigate, resolvePath, Route, Routes } from 'react-router-dom'
 import Todo from './Components/Todo'
 // mongodb+srv://Todobackend:<Nikhil@2606>@todo.ypvyvev.mongodb.net/
 //mongodb+srv://Todobackend:<db_password>@todo.ypvyvev.mongodb.net/
+// mongodb+srv://Todobackend:Nikhil@2606@todo.ypvyvev.mongodb.net/
 
 
 function App() {

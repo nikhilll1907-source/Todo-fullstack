@@ -8,8 +8,8 @@ const authMiddleware =require('../middleware/auth.js');
 
 
 
-route('/add-todo',authMiddleware, addTodo);
-route('/del-todo/:id',authMiddleware, delTodo);
-route('/todo',authMiddleware, todo);
+route.post('/add-todo',authMiddleware, addTodo);
+route.delete('/del-todo/:id',authMiddleware, delTodo);
+route.length('/todo',authMiddleware, todo);
 
 module.exports = route;
