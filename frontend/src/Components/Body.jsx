@@ -3,20 +3,40 @@ import Todo from './Todo'
 
 
 function Body({todos,deleteTodo}) {
-  return (
-    <div className=''>
+ return (
+<div className="max-w-6xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    
+{
+  todos.length === 0 
+    ? (
+      <h1 className="col-span-full text-xl text-center text-gray-500">
+        No work for now 😌
+      </h1>
+    )
+    : (
+      <h1 className="col-span-full text-xl text-center text-gray-800 font-semibold">
+  Welcome 👋
+</h1>
+    )
+}
+
     {
-        (todos.length === 0) 
-          ? <h1 className='text-2xl text-center mt-3'>No work for now relax</h1> 
-          : <h1 className='text-2xl text-center m-3 p-4'>{`welcome `}</h1>
-      }
-   {
-        todos.map((e,i) => {
-      return <Todo  key={i} i={i+1} todo={e.task}  id={e._id} deleteTodo={deleteTodo} />
-       })
-      }
-    </div>
-  )
+      todos.map((e, i) => {
+        return (
+          <Todo
+            key={e._id}
+            i={i + 1}
+            task={e.task}
+            id={e._id}
+            deleteTodo={deleteTodo}
+            title={e.title}
+          />
+        )
+      })
+    }
+
+  </div>
+)
 }
 
 export default Body

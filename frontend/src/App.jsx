@@ -7,6 +7,8 @@ import Singin from './Components/Singin'
 import About from './Components/About'
 import axios from "axios";
 import { Navigate, resolvePath, Route, Routes } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+
 
 
 import Todo from './Components/Todo'
@@ -18,11 +20,11 @@ function App() {
   let [refresh, setRefresh] = useState(0);
   let [logdin, Setlogdin] = useState(false);
 
-  const addTodo = async (todo) => {
+  const addTodo = async (content) => {
     try {
       const response = await axios.post(`${API}/todo/add-todo`, {
-        title: (todo+'xyz'),
-        task: todo,
+        title:content.title,
+        task:content.task,
       }, { withCredentials: true }) // withCredentials is vry important to talk
       console.log(response)
       setRefresh(prev => prev + 1);
@@ -49,20 +51,18 @@ function App() {
   }, [refresh])
 
 
-  const signup = async (username, password) => {
-    try {
-      const response = await axios.post(`${API}/user/signup`, {
-        username: username,
-        password: password
-      }, { withCredentials: true })
-      Setlogdin(true)
-      console.log(response)
+const signup = async (username, password) => {
+  try {
+    const res = await axios.post(`${API}/user/signup`, {
+      username,
+      password
+    }, { withCredentials: true });
 
-    }
-    catch (err) {
-      console.log(err);
-    }
+    return res.data; 
+  } catch (err) {
+    throw err.response?.data?.err || "Something went wrong";
   }
+};
   const logout = async () => {
     try {
       const response = await axios.post(`${API}/user/logout`, {}, { withCredentials: true })
@@ -76,20 +76,19 @@ function App() {
     }
   }
 
-  const login = async (username, password) => {
-    try {
-      const response = await axios.post(`${API}/user/login`, {
-        username,
-        password,
-      }, { withCredentials: true });
-      console.log(response)
-      Setlogdin(true)
-      setRefresh(prev => prev + 1);
-    }
-    catch (err) {
-      console.log(err)
-    }
+const login = async (username, password) => {
+  try {
+    const res = await axios.post(`${API}/user/login`, {
+      username,
+      password
+    }, { withCredentials: true });
+       Setlogdin(true)
+       setRefresh(prev=>prev+1)
+    return res.data;
+  } catch (err) {
+    throw err.response?.data?.error || "Login failed";
   }
+};
   const deleteTodo = async (id) => {
     try {
       const response = await axios.delete(`${API}/todo/del-todo/${id}`, { withCredentials: true });
@@ -103,20 +102,53 @@ function App() {
 
 
   return (
-    <>
-      <div className='h-screen bg-gray-800'>
-        <Header logout={logout} logdin={logdin}></Header>
-        <Routes>
-          <Route path='/' element={logdin ? <Body todos={todos} deleteTodo={deleteTodo} /> : <Navigate to='/login'></Navigate>}></Route>
-          <Route path='/add-todo' element={logdin ? <AddTodo addTodo={addTodo} /> : <Navigate to='/login'></Navigate>}></Route>
-          <Route path='/signup' element={!logdin ? <SignUp signup={signup} /> : <Navigate to='/'></Navigate>}></Route>
-          <Route path='/login' element={!logdin ? <Singin login={login} /> : <Navigate to='/'></Navigate>}></Route>
-          <Route path='/about' element={<About />}></Route>
+   <>
+  <div className='min-h-screen bg-gray-100'>
+    
+    <Header logout={logout} logdin={logdin} />
 
-        </Routes>
-      </div>
+    <Routes>
+      <Route
+        path='/'
+        element={
+          logdin
+            ? <Body todos={todos} deleteTodo={deleteTodo} />
+            : <Navigate to='/login' />
+        }
+      />
 
-    </>
+      <Route
+        path='/add-todo'
+        element={
+          logdin
+            ? <AddTodo addTodo={addTodo} />
+            : <Navigate to='/login' />
+        }
+      />
+
+      <Route
+        path='/signup'
+        element={
+          !logdin
+            ? <SignUp signup={signup} />
+            : <Navigate to='/' />
+        }
+      />
+
+      <Route
+        path='/login'
+        element={
+          !logdin
+            ? <Singin login={login} logdin={logdin} />
+            : <Navigate to='/' />
+        }
+      />
+
+      <Route path='/about' element={<About />} />
+
+    </Routes>
+  </div>
+</>
   )
 }
 

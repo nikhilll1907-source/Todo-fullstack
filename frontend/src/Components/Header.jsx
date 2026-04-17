@@ -1,41 +1,85 @@
 import React, { Activity } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 function Header({logout,logdin}) {
-  return (
-    <>
-    <div className='bg-cyan-900 flex w-full justify-between p-3'>
-        <div className='p-4'>Logo </div>
-        <div className='flex gap-3 items-center'>
-          <NavLink className={({isActive})=>{
-             return `p-1  hover:bg-cyan-600 ${isActive ? "text-white" : "text-black"} rounded-lg flex justify-center items-center min-w-18 `
-          }} to='/'
-          >Home
-          </NavLink>
+ return (
+  <>
+    <div className='bg-white shadow-md flex w-full justify-between p-3'>
+      
+      {/* Logo */}
+      <div className='p-2 text-xl font-bold text-blue-500'>
+        Logo
+      </div>
 
-            <NavLink className={({isActive})=>{
-             return `p-1  hover:bg-cyan-600 ${isActive ? "text-white" : "text-black"} rounded-lg flex justify-center items-center min-w-18 `
-          }} to='/add-todo'
-          >Add-Todo
-          </NavLink>
+      {/* Nav Links */}
+      <div className='flex gap-3 items-center'>
 
-            <NavLink className={({isActive})=>{
-             return `p-1  hover:bg-cyan-600 ${isActive ? "text-white" : "text-black"} rounded-lg flex justify-center items-center min-w-18 `
-          }} to='/about'
-          >About
-          </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            `px-3 py-1 rounded-lg transition ${
+              isActive
+                ? "bg-blue-500 text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`
+          }
+          to='/'
+        >
+          Home
+        </NavLink>
 
-            { !logdin && <NavLink className={({isActive})=>{
-             return `p-1  hover:bg-cyan-600 ${isActive ? "text-white" : "text-black"} rounded-lg flex justify-center items-center min-w-18 `
-          }} to='/login'
-          >login
-          </NavLink>}
-          
-           { logdin ? <button onClick={()=>logout()}   className='bg-red-600 p-2 rounded-lg hover:bg-red-900'>Logout</button>:null}
-            
-        </div>
+        <NavLink
+          className={({ isActive }) =>
+            `px-3 py-1 rounded-lg transition ${
+              isActive
+                ? "bg-blue-500 text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`
+          }
+          to='/add-todo'
+        >
+          Add-Todo
+        </NavLink>
+
+        <NavLink
+          className={({ isActive }) =>
+            `px-3 py-1 rounded-lg transition ${
+              isActive
+                ? "bg-blue-500 text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`
+          }
+          to='/about'
+        >
+          About
+        </NavLink>
+
+        {!logdin && (
+          <NavLink
+            className={({ isActive }) =>
+              `px-3 py-1 rounded-lg transition ${
+                isActive
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-700 hover:bg-gray-200"
+              }`
+            }
+            to='/login'
+          >
+            Login
+          </NavLink>
+        )}
+
+        {logdin && (
+          <button
+            onClick={() => logout()}
+            className='bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition'
+          >
+            Logout
+          </button>
+        )}
+
+      </div>
     </div>
-    </>
-  )
+  </>
+)
 }
 
 export default Header
