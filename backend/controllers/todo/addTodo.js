@@ -22,3 +22,4 @@ const addTodo = async (req, res) => {
     }
 
 }
+module.exports=addTodo;
