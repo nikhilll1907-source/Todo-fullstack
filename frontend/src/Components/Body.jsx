@@ -2,7 +2,7 @@
 import Todo from './Todo'
 
 
-function Body({todos,deleteTodo}) {
+function Body({username,todos,deleteTodo}) {
  return (
 <div className="max-w-6xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     
@@ -15,7 +15,7 @@ function Body({todos,deleteTodo}) {
     )
     : (
       <h1 className="col-span-full text-xl text-center text-gray-800 font-semibold">
-  Welcome 👋
+  {`Welcome 👋 ${username}` }
 </h1>
     )
 }

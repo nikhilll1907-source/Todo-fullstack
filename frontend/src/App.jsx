@@ -15,16 +15,32 @@ import Todo from './Components/Todo'
 const API = import.meta.env.VITE_BACKEND2;
 
 function App() {
-
+    let [username,setUsername]=useState('User');
   let [todos, setTodos] = useState([]);
   let [refresh, setRefresh] = useState(0);
   let [logdin, Setlogdin] = useState(false);
 
+  useEffect(() => {
+    const isLogdin=async()=>{
+    try {
+      const response = await axios.get(`${API}/user/isLogdin`, { withCredentials: true })
+      console.log(response)
+      Setlogdin(true)
+      setRefresh(prev=>prev+1)
+      setUsername(response.data.username)
+      console.log(response.data.username)
+    }
+    catch (err) {
+      console.log(`error user  is not logdin ${err}`)
+    }   
+  }
+  isLogdin()
+  }, [])
   const addTodo = async (content) => {
     try {
       const response = await axios.post(`${API}/todo/add-todo`, {
-        title:content.title,
-        task:content.task,
+        title: content.title,
+        task: content.task,
       }, { withCredentials: true }) // withCredentials is vry important to talk
       console.log(response)
       setRefresh(prev => prev + 1);
@@ -41,7 +57,6 @@ function App() {
         const response = await axios.get(`${API}/todo/todo`, { withCredentials: true })
         console.log(response.data.todos);
         setTodos(response.data.todos);
-        console.log(todos)
       }
       catch (err) {
         console.log(`error is going on ${err}`)
@@ -51,18 +66,18 @@ function App() {
   }, [refresh])
 
 
-const signup = async (username, password) => {
-  try {
-    const res = await axios.post(`${API}/user/signup`, {
-      username,
-      password
-    }, { withCredentials: true });
-
-    return res.data; 
-  } catch (err) {
-    throw err.response?.data?.err || "Something went wrong";
-  }
-};
+  const signup = async (username, password) => {
+    try {
+      const res = await axios.post(`${API}/user/signup`, {
+        username,
+        password
+      }, { withCredentials: true });
+         Setlogdin(true)
+      return res.data;
+    } catch (err) {
+      throw err.response?.data?.err || "Something went wrong";
+    }
+  };
   const logout = async () => {
     try {
       const response = await axios.post(`${API}/user/logout`, {}, { withCredentials: true })
@@ -76,19 +91,19 @@ const signup = async (username, password) => {
     }
   }
 
-const login = async (username, password) => {
-  try {
-    const res = await axios.post(`${API}/user/login`, {
-      username,
-      password
-    }, { withCredentials: true });
-       Setlogdin(true)
-       setRefresh(prev=>prev+1)
-    return res.data;
-  } catch (err) {
-    throw err.response?.data?.error || "Login failed";
-  }
-};
+  const login = async (username, password) => {
+    try {
+      const res = await axios.post(`${API}/user/login`, {
+        username,
+        password
+      }, { withCredentials: true });
+      Setlogdin(true)
+      setRefresh(prev => prev + 1)
+      return res.data;
+    } catch (err) {
+      throw err.response?.data?.error || "Login failed";
+    }
+  };
   const deleteTodo = async (id) => {
     try {
       const response = await axios.delete(`${API}/todo/del-todo/${id}`, { withCredentials: true });
@@ -102,53 +117,53 @@ const login = async (username, password) => {
 
 
   return (
-   <>
-  <div className='min-h-screen bg-gray-100'>
-    
-    <Header logout={logout} logdin={logdin} />
+    <>
+      <div className='min-h-screen bg-gray-100'>
 
-    <Routes>
-      <Route
-        path='/'
-        element={
-          logdin
-            ? <Body todos={todos} deleteTodo={deleteTodo} />
-            : <Navigate to='/login' />
-        }
-      />
+        <Header logout={logout} logdin={logdin} />
 
-      <Route
-        path='/add-todo'
-        element={
-          logdin
-            ? <AddTodo addTodo={addTodo} />
-            : <Navigate to='/login' />
-        }
-      />
+        <Routes>
+          <Route
+            path='/'
+            element={
+              logdin
+                ? <Body username={username} todos={todos} deleteTodo={deleteTodo} />
+                : <Navigate to='/login' />
+            }
+          />
 
-      <Route
-        path='/signup'
-        element={
-          !logdin
-            ? <SignUp signup={signup} />
-            : <Navigate to='/' />
-        }
-      />
+          <Route
+            path='/add-todo'
+            element={
+              logdin
+                ? <AddTodo addTodo={addTodo} />
+                : <Navigate to='/login' />
+            }
+          />
 
-      <Route
-        path='/login'
-        element={
-          !logdin
-            ? <Singin login={login} logdin={logdin} />
-            : <Navigate to='/' />
-        }
-      />
+          <Route
+            path='/signup'
+            element={
+              !logdin
+                ? <SignUp signup={signup} />
+                : <Navigate to='/' />
+            }
+          />
 
-      <Route path='/about' element={<About />} />
+          <Route
+            path='/login'
+            element={
+              !logdin
+                ? <Singin login={login} logdin={logdin} />
+                : <Navigate to='/' />
+            }
+          />
 
-    </Routes>
-  </div>
-</>
+          <Route path='/about' element={<About />} />
+
+        </Routes>
+      </div>
+    </>
   )
 }
 

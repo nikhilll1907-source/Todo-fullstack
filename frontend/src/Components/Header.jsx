@@ -6,9 +6,9 @@ function Header({logout,logdin}) {
     <div className='bg-white shadow-md flex w-full justify-between p-3'>
       
       {/* Logo */}
-      <div className='p-2 text-xl font-bold text-blue-500'>
+      <Link className='p-2 text-xl font-bold text-blue-500' to='/'>
         Logo
-      </div>
+      </Link>
 
       {/* Nav Links */}
       <div className='flex gap-3 items-center'>
